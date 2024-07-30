@@ -4,6 +4,9 @@ import model.Ticket;
 
 import java.util.Scanner;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class TicketService {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -47,5 +50,20 @@ public class TicketService {
         System.out.println("Stadium Sector: " + ticket.getStadiumSector());
         System.out.println("Backpack Weight: " + ticket.getBackpackWeight());
         System.out.println();
+    }
+
+    private Map<String, Ticket> ticketStorage;
+
+    public TicketService() {
+        ticketStorage = new HashMap<>();
+        for (int i = 1; i <= 10; i++) {
+            String id = String.format("%04d", i);
+            Ticket ticket = new Ticket(id, "ConcertHall" + i, 100 + i, System.currentTimeMillis(), i % 2 == 0, 'A', 5.0);
+            ticketStorage.put(id, ticket);
+        }
+    }
+
+    public Ticket getTicketById(String id) {
+        return ticketStorage.get(id);
     }
 }
