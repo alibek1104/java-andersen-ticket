@@ -1,6 +1,8 @@
 package model;
 
-public class Ticket {
+import java.util.Objects;
+
+public class Ticket extends Printable implements Identifiable {
     private String id;
     private String concertHall;
     private int eventCode;
@@ -37,10 +39,12 @@ public class Ticket {
         }
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }
@@ -92,4 +96,37 @@ public class Ticket {
     public void setBackpackWeight(double backpackWeight) {
         this.backpackWeight = backpackWeight;
     }
+
+    public String toString() {
+        return "Ticket{" +
+                "id='" + id + '\'' +
+                ", concertHall='" + concertHall + '\'' +
+                ", eventCode=" + eventCode +
+                ", time=" + time +
+                ", isPromo=" + isPromo +
+                ", stadiumSector=" + stadiumSector +
+                ", backpackWeight=" + backpackWeight +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ticket ticket = (Ticket) o;
+        return eventCode == ticket.eventCode &&
+                time == ticket.time &&
+                isPromo == ticket.isPromo &&
+                stadiumSector == ticket.stadiumSector &&
+                Double.compare(ticket.backpackWeight, backpackWeight) == 0 &&
+                Objects.equals(id, ticket.id) &&
+                Objects.equals(concertHall, ticket.concertHall);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, concertHall, eventCode, time, isPromo, stadiumSector, backpackWeight);
+    }
 }
+
+

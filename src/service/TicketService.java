@@ -1,51 +1,47 @@
 package service;
 
-import model.Ticket;
+import model.*;
 
 import java.util.Scanner;
 
 public class TicketService {
+    private Ticket[] tickets = new Ticket[10];
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Введите данные для билета:");
-        System.out.print("ID (макс 4 символа): ");
-        String id = scanner.nextLine();
+        TicketService ticketService = new TicketService();
+        for (int i = 0; i < 10; i++) {
+            ticketService.tickets[i] = new Ticket("ID" + i, "Hall" + i, 100 + i, System.currentTimeMillis(), i % 2 == 0, (char) ('A' + (i % 3)), 5.0 + i);
+        }
 
-        System.out.print("Концертный зал (макс 10 символов): ");
-        String concertHall = scanner.nextLine();
+        for (Ticket ticket : ticketService.tickets) {
+            ticket.print();
+        }
 
-        System.out.print("Код мероприятия (3 цифры): ");
-        int eventCode = scanner.nextInt();
+        User client = new Client("C1", "Client One");
+        User admin = new Admin("A1", "Admin One");
 
-        System.out.print("Время (Unix timestamp): ");
-        long time = scanner.nextLong();
+        client.printRole();
+        admin.printRole();
 
-        System.out.print("Промо билет (true/false): ");
-        boolean isPromo = scanner.nextBoolean();
+        if (client instanceof Client) {
+            ((Client) client).getTicket(ticketService.tickets[0]).print();
+        }
 
-        System.out.print("Сектор стадиона (от 'A' до 'C'): ");
-        char stadiumSector = scanner.next().charAt(0);
-
-        System.out.print("Максимально допустимый вес рюкзака (кг, с точностью до граммов): ");
-        double backpackWeight = scanner.nextDouble();
-
-        Ticket ticket = new Ticket(id, concertHall, eventCode, time, isPromo, stadiumSector, backpackWeight);
-
-        printTicketDetails(ticket);
+        if (admin instanceof Admin) {
+            ((Admin) admin).checkTicket(ticketService.tickets[1]);
+        }
 
         scanner.close();
     }
 
-    public static void printTicketDetails(Ticket ticket) {
-        System.out.println("model.Ticket Details:");
-        System.out.println("ID: " + ticket.getId());
-        System.out.println("Concert Hall: " + ticket.getConcertHall());
-        System.out.println("Event Code: " + ticket.getEventCode());
-        System.out.println("Time: " + ticket.getTime());
-        System.out.println("Is Promo: " + ticket.isPromo());
-        System.out.println("Stadium Sector: " + ticket.getStadiumSector());
-        System.out.println("Backpack Weight: " + ticket.getBackpackWeight());
-        System.out.println();
+    public Ticket getTicketById(String id) {
+        for (Ticket ticket : tickets) {
+            if (ticket.getId().equals(id)) {
+                return ticket;
+            }
+        }
+        return null;
     }
 }
